@@ -36,6 +36,16 @@ class OllamaAPI:
 
         return self._make_request('POST', endpoint, data=payload)
     
+    def create_model(self, name:str, path:str, stream:bool=False):
+        endpoint = 'api/create'
+        payload = {
+            "name": name,
+            "path": path,
+            "stream": stream
+        }
+
+        return self._make_request('POST', endpoint, data=payload)
+    
     def list_models(self):
         endpoint = 'api/tags'
         return self._make_request('GET', endpoint)
