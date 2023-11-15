@@ -40,6 +40,15 @@ class OllamaAPI:
         endpoint = 'api/tags'
         return self._make_request('GET', endpoint)
     
+    def model_info(self, name:str):
+        endpoint = 'api/show'
+        payload = {
+            "name": name
+        }
+
+        return self._make_request('POST', endpoint, data=payload)
+
+    # Work in progress
     def pull_model(self, name:str, insecure:bool=False, stream:bool=False):
         endpoint = 'api/pull'
         payload = {
