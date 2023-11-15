@@ -57,6 +57,24 @@ class OllamaAPI:
         }
 
         return self._make_request('POST', endpoint, data=payload)
+    
+    # Work in progress
+    def copy_model(self, source:str, destination:str):
+        endpoint = 'api/copy'
+        payload = {
+            "source": source,
+            "destination": destination
+        }
+
+        return self._make_request('POST', endpoint, data=payload)
+    
+    def delete_model(self, name:str):
+        endpoint = 'api/delete'
+        payload = {
+            "name": name
+        }
+
+        return self._make_request('DELETE', endpoint, data=payload)
 
     # Work in progress
     def pull_model(self, name:str, insecure:bool=False, stream:bool=False):
