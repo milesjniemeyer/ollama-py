@@ -5,7 +5,7 @@ class OllamaAPI:
     def __init__(self, base_url):
         self.base_url = base_url
 
-    # Helper function that uses requests to make the API calls
+    # Helper function that uses requests to make API calls
     def _make_request(self, method, endpoint, data=None):
         headers = { "Content-Type": "application/json" }
         url = urljoin(self.base_url, endpoint)
@@ -26,7 +26,7 @@ class OllamaAPI:
                 print(f'Response content: {response.content}')
             return None
 
-    # Generates a completion by taking in a model and prompt
+    # Generate a response for a given prompt with a provided model
     def generate_completion(self, model:str, prompt:str, format:str=None, options:str=None, system:str=None, template:str=None, context:str=None, stream:bool=False, raw:str=False):
         endpoint = 'api/generate'
         payload = {
@@ -43,21 +43,25 @@ class OllamaAPI:
 
         return self._make_request('POST', endpoint, data=payload)
     
-    def create_model(self, name:str, path:str, stream:bool=False):
+    # Create a model from a Modelfile
+    def create_model(self, name:str, modelfile:str, path:str, stream:bool=False):
         endpoint = 'api/create'
         payload = {
             "name": name,
-            "path": path,
-            "stream": stream
+            "modelfile": modelfile,
+            "stream": stream,
+            "path": path
         }
 
         return self._make_request('POST', endpoint, data=payload)
     
+    # List models that are available locally
     def list_models(self):
         endpoint = 'api/tags'
 
         return self._make_request('GET', endpoint)
     
+    # Show details about a model including modelfile, template, parameters, license, and system prompt
     def model_info(self, name:str):
         endpoint = 'api/show'
         payload = {
@@ -66,6 +70,7 @@ class OllamaAPI:
 
         return self._make_request('POST', endpoint, data=payload)
     
+    # Copy a model. Creates a model with another name from an existing model
     def copy_model(self, source:str, destination:str):
         endpoint = 'api/copy'
         payload = {
@@ -75,7 +80,7 @@ class OllamaAPI:
 
         return self._make_request('POST', endpoint, data=payload)
     
-    # Response
+    # Delete a model and its data
     def delete_model(self, name:str):
         endpoint = 'api/delete'
         payload = {
@@ -85,6 +90,7 @@ class OllamaAPI:
         return self._make_request('DELETE', endpoint, data=payload)
 
     # Work in progress
+    # Download a model from the ollama library
     def pull_model(self, name:str, insecure:bool=False, stream:bool=False):
         endpoint = 'api/pull'
         payload = {
