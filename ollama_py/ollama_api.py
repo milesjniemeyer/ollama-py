@@ -1,3 +1,5 @@
+# https://www.pretzellogix.net/2021/12/08/step-2-write-a-low-level-rest-adapter/
+
 import requests
 from urllib.parse import urljoin
 
