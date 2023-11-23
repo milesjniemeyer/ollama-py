@@ -1,4 +1,5 @@
 import requests
+from urllib.parse import urljoin
 
 class OllamaAPI:
     def __init__(self, base_url):
@@ -7,16 +8,22 @@ class OllamaAPI:
     # Helper function that uses requests to make the API calls
     def _make_request(self, method, endpoint, data=None):
         headers = { "Content-Type": "application/json" }
-        url = f'{self.base_url}/{endpoint}'
+        url = urljoin(self.base_url, endpoint)
 
         try:
             response = requests.request(method, url, json=data, headers=headers)
             response.raise_for_status()
-            return response.json()
+
+            if response.content:
+                return response.json()
+            else:
+                return None
+
         except requests.exceptions.RequestException as e:
             print(f'Error making API request: {e}')
-            print(f'HTTP Status Code: {response.status_code}')
-            print(f'Response content: {response.content}')
+            if 'response' in locals() and hasattr(response, 'status_code'):
+                print(f'HTTP Status Code: {response.status_code}')
+                print(f'Response content: {response.content}')
             return None
 
     # Generates a completion by taking in a model and prompt
@@ -48,6 +55,7 @@ class OllamaAPI:
     
     def list_models(self):
         endpoint = 'api/tags'
+
         return self._make_request('GET', endpoint)
     
     def model_info(self, name:str):
@@ -58,7 +66,6 @@ class OllamaAPI:
 
         return self._make_request('POST', endpoint, data=payload)
     
-    # Work in progress
     def copy_model(self, source:str, destination:str):
         endpoint = 'api/copy'
         payload = {
@@ -68,6 +75,7 @@ class OllamaAPI:
 
         return self._make_request('POST', endpoint, data=payload)
     
+    # Response
     def delete_model(self, name:str):
         endpoint = 'api/delete'
         payload = {
