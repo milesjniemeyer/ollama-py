@@ -1,0 +1,2 @@
+class OllamaAPIException(Exception):
+    pass

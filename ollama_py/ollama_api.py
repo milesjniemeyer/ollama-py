@@ -4,13 +4,13 @@ import requests
 from urllib.parse import urljoin
 
 class OllamaAPI:
-    def __init__(self, base_url):
-        self.base_url = base_url
+    def __init__(self, api_url:str):
+        self.api_url = api_url
 
     # Helper function that uses requests to make API calls
     def _make_request(self, method, endpoint, data=None):
         headers = { "Content-Type": "application/json" }
-        url = urljoin(self.base_url, endpoint)
+        url = urljoin(self.api_url, endpoint)
 
         try:
             response = requests.request(method, url, json=data, headers=headers)
